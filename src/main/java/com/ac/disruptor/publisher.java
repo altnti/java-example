@@ -19,16 +19,10 @@ class publisher implements Runnable {
     public void run() {
         int count = QueueConfig.TOTAL_SIZE;
 
-        while ( --count > 0 ){
-            if ( ringBuffer.remainingCapacity() > 0 ) {
-                ringBuffer.publishEvent(TRANSLATOR, QueueConfig.STEP);
-            }
-            else {
-                QueueConfig.count.addAndGet(1);
-            }
+        while ( --count >= 0 ){
+            ringBuffer.publishEvent(TRANSLATOR, QueueConfig.STEP);
         }
 
-        int num = QueueConfig.publishNum.decrementAndGet();
-        System.out.println("thread end, id: " + num);
+        System.out.println("thread end, id: " + QueueConfig.publishNum.decrementAndGet());
     }
 }

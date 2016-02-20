@@ -1,3 +1,4 @@
+import com.ac.disruptor.PollerExample;
 import com.lmax.disruptor.*;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
@@ -6,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.junit.Assert.assertTrue;
 
 class ConfigInfo {
     public static AtomicInteger thredNum  = new AtomicInteger(1000);
@@ -262,28 +265,6 @@ public class QueueTest {
 
     @org.junit.Test
     public void testPoller() throws ExecutionException, InterruptedException {
-        RingBuffer<LogEvent> ringBuffer = RingBuffer.createMultiProducer(new LogEventFactory(), 1024);
-
-        //生产
-        ExecutorService es = Executors.newFixedThreadPool(ConfigInfo.thredNum.get()+3);
-        EventPoller<LogEvent> poller1 = ringBuffer.newPoller();
-        EventPoller<LogEvent> poller2 = ringBuffer.newPoller();
-        EventPoller<LogEvent> poller3 = ringBuffer.newPoller();
-        ringBuffer.addGatingSequences(poller1.getSequence());
-        ringBuffer.addGatingSequences(poller2.getSequence());
-        ringBuffer.addGatingSequences(poller3.getSequence());
-        es.submit(new PollCall(poller1));
-        es.submit(new PollCall(poller2));
-        es.submit( new PollCall(poller3) );
-        List<Future> list = new ArrayList<Future>();
-        int threadNum = ConfigInfo.thredNum.get();
-        for ( int i=0; i<threadNum; ++i ){
-            list.add( es.submit(new LogEventProducerWithTranslator(ringBuffer)) );
-        }
-        for ( Future f :list ){
-            f.get();
-        }
-
-        System.out.println( ConfigInfo.totalSize.get() );
+        assertTrue( new PollerExample().test() );
     }
 }
