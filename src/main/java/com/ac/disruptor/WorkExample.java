@@ -22,8 +22,7 @@ public class WorkExample {
         RingBuffer<AddEvent> ringBuffer = pool.start(Executors.newCachedThreadPool());
 
         ExecutorService executorService = Executors.newFixedThreadPool(QueueConfig.CONSUMER_SIZE+QueueConfig.PUBLISHER_SIZE);
-        int threadNum = QueueConfig.PUBLISHER_SIZE;
-        for ( int i=0; i<threadNum; ++i ){
+        for ( int i=0; i<QueueConfig.PUBLISHER_SIZE; ++i ){
             executorService.submit(new publisher(ringBuffer));
         }
 

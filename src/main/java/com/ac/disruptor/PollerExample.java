@@ -45,7 +45,7 @@ public class PollerExample {
 
     public boolean test() throws ExecutionException, InterruptedException {
         RingBuffer<AddEvent> ringBuffer = RingBuffer.createMultiProducer(new AddEventFactory(), QueueConfig.QUEUE_SIZE);
-        ExecutorService executorService = Executors.newFixedThreadPool(QueueConfig.publishNum.get() + QueueConfig.CONSUMER_SIZE);
+        ExecutorService executorService = Executors.newFixedThreadPool(QueueConfig.PUBLISHER_SIZE+QueueConfig.CONSUMER_SIZE);
         List<Future> list = new ArrayList<Future>();
         /*
         创建消费者
@@ -57,8 +57,7 @@ public class PollerExample {
             list.add(executorService.submit(new PollCall(poller)));
         }
         //创建生产者
-        final int threadNum = QueueConfig.publishNum.get();
-        for (int i = 0; i < threadNum; ++i) {
+        for (int i = 0; i < QueueConfig.PUBLISHER_SIZE; ++i) {
             list.add(executorService.submit(new publisher(ringBuffer)));
         }
         //等待所有线程退出
