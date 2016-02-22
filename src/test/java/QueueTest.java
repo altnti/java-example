@@ -1,4 +1,5 @@
 import com.ac.disruptor.PollerExample;
+import com.ac.disruptor.WorkExample;
 import com.lmax.disruptor.*;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
@@ -222,21 +223,7 @@ public class QueueTest {
 
     @org.junit.Test
     public void testWorkPool() throws ExecutionException, InterruptedException {
-        WorkerPool<LogEvent> pool = new WorkerPool<LogEvent>(new LogEventFactory(), new FatalExceptionHandler(),
-                new LogEventHandler(0), new LogEventHandler(1), new LogEventHandler(2));
-        RingBuffer<LogEvent> ringBuffer = pool.start(Executors.newCachedThreadPool());
-
-        ExecutorService es = Executors.newFixedThreadPool(ConfigInfo.thredNum.get()+3);
-        List<Future> list = new ArrayList<Future>();
-        int threadNum = ConfigInfo.thredNum.get();
-        for ( int i=0; i<threadNum; ++i ){
-            list.add( es.submit(new LogEventProducerWithTranslator(ringBuffer)) );
-        }
-        for ( Future f :list ){
-            f.get();
-        }
-
-        System.out.println( ConfigInfo.totalSize.get() );
+        assertTrue( new WorkExample().test() );
     }
 
     @org.junit.Test
