@@ -67,6 +67,6 @@ public class PollerExample {
         }
 
         System.out.println("count:" + QueueConfig.count.get());
-        return QueueConfig.count.get() == QueueConfig.TOTAL_SIZE * QueueConfig.PUBLISHER_SIZE;
+        return QueueConfig.count.get()/QueueConfig.CONSUMER_SIZE == QueueConfig.TOTAL_SIZE * QueueConfig.PUBLISHER_SIZE;
     }
 }

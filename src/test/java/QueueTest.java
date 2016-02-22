@@ -239,30 +239,6 @@ public class QueueTest {
         System.out.println( ConfigInfo.totalSize.get() );
     }
 
-    static  class PollCall implements Runnable{
-        EventPoller<LogEvent> eventPoller;
-        public PollCall( EventPoller<LogEvent> eventPoller ){
-            this.eventPoller = eventPoller;
-        }
-
-        public void run() {
-            while (ConfigInfo.thredNum.get() != 0) try {
-                EventPoller.PollState state = eventPoller.poll(new EventPoller.Handler<LogEvent>() {
-                    public boolean onEvent(LogEvent event, long sequence, boolean endOfBatch) throws Exception {
-                        ConfigInfo.totalSize.addAndGet(event.getSize());
-                        return true;
-                    }
-                });
-
-                if ( state == EventPoller.PollState.IDLE ){
-                    //Thread.sleep(500);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     @org.junit.Test
     public void testPoller() throws ExecutionException, InterruptedException {
         assertTrue( new PollerExample().test() );
