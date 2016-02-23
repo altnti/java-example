@@ -1,5 +1,5 @@
 import com.ac.disruptor.PollerExample;
-import com.ac.disruptor.WorkExample;
+import com.ac.disruptor.WorkPoolExample;
 import com.lmax.disruptor.*;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
@@ -223,7 +223,7 @@ public class QueueTest {
 
     @org.junit.Test
     public void testWorkPool() throws ExecutionException, InterruptedException {
-        assertTrue( new WorkExample().test() );
+        assertTrue( new WorkPoolExample().test() );
     }
 
     @org.junit.Test

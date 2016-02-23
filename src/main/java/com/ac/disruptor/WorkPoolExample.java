@@ -5,7 +5,6 @@ import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.WorkHandler;
 import com.lmax.disruptor.WorkerPool;
 
-import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -15,7 +14,7 @@ class WorkHandlerImpl implements WorkHandler<AddEvent>{
     }
 }
 
-public class WorkExample {
+public class WorkPoolExample {
     public boolean test() throws InterruptedException {
         WorkerPool<AddEvent> pool = new WorkerPool<AddEvent>( new AddEventFactory(), new FatalExceptionHandler(),
                 new WorkHandlerImpl(), new WorkHandlerImpl(), new WorkHandlerImpl() );
