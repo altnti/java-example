@@ -16,6 +16,10 @@ class WorkHandlerImpl implements WorkHandler<AddEvent>{
 }
 
 public class WorkExample {
+    public WorkExample(){
+        QueueConfig.reset();
+    }
+
     public boolean test() throws InterruptedException {
         WorkerPool<AddEvent> pool = new WorkerPool<AddEvent>( new AddEventFactory(), new FatalExceptionHandler(),
                 new WorkHandlerImpl(), new WorkHandlerImpl(), new WorkHandlerImpl() );
