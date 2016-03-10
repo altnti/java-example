@@ -11,8 +11,8 @@ class publisher implements Runnable {
     }
 
     static final EventTranslatorOneArg<AddEvent, Integer> TRANSLATOR = new EventTranslatorOneArg<AddEvent, Integer>(){
-        public void translateTo(AddEvent event, long sequence, Integer arg0) {
-            event.setSize( arg0 );
+        public void translateTo(AddEvent event, long sequence, Integer size) {
+            event.setSize( size );
         }
     };
 

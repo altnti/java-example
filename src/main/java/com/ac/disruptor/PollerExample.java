@@ -38,6 +38,13 @@ class PollCall implements Runnable {
     }
 }
 
+/**
+ * publisher:n -> event -> all of consumer
+ *
+ * use flag(example AtomicBoolean) to implement event process by one of consumer.
+ * Note: publisher must reset flag.
+ *
+ */
 public class PollerExample {
     public PollerExample() {
         QueueConfig.reset();
@@ -48,19 +55,19 @@ public class PollerExample {
         ExecutorService executorService = Executors.newFixedThreadPool(QueueConfig.PUBLISHER_SIZE+QueueConfig.CONSUMER_SIZE);
         List<Future> list = new ArrayList<Future>();
         /*
-        创建消费者
-        注：每个事件都会被所有的消费者消费
+        create consumers
+        Note: every event process by all consumers!!!
          */
         for (int i = 0; i < QueueConfig.CONSUMER_SIZE; ++i) {
             EventPoller<AddEvent> poller = ringBuffer.newPoller();
             ringBuffer.addGatingSequences(poller.getSequence());
             list.add(executorService.submit(new PollCall(poller)));
         }
-        //创建生产者
+        //create producers/publishers
         for (int i = 0; i < QueueConfig.PUBLISHER_SIZE; ++i) {
             list.add(executorService.submit(new publisher(ringBuffer)));
         }
-        //等待所有线程退出
+        //wait the all threads exit.
         for (Future f : list) {
             f.get();
         }
